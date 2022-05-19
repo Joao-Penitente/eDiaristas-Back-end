@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DiaristaRequest;
 use App\Models\Diarista;
 use App\Services\ViaCEP;
 use Illuminate\Http\Request;
@@ -15,17 +14,17 @@ class BuscaDiaristaCep extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(DiaristaRequest $request, ViaCEP $ViaCEP)
+    public function __invoke(Request $request, ViaCEP $ViaCEP)
     {
         $endereco = $ViaCEP->buscar($request->cep);
         
         if($endereco === false){
             return response()->json(['erro'=>'Cep Inválido'], 400);
         }
-
+        
         return [
-            'diaristas' => Diarista::buscaPorCodigoIbge($endereco['ibge']),
-            'quantidade_diaristas' => Diarista::quantidadePorCodigoIbge($endereco['ibge']),
+            'diaristas' => Diarista::buscarPorCodigoIbge($endereco['ibge']),
+            'quantidade_diaristas' => Diarista::quantidadePorCodigoIbge($endereco['ibge'])
         ];
         //return response()->json($diaristas, 200);
 
